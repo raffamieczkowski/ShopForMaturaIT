@@ -1,8 +1,17 @@
-import { createApp } from 'vue'
-import './index.css'
+import { createApp } from 'vue';
+import { createRouter, createWebHistory } from 'vue-router';
 
-import App from './App.vue'
+import './index.css';
+import App from './App.vue';
 
-const app = createApp(App)
+const app = createApp(App);
 
-app.mount('#app')
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes: []
+});
+
+app.use(router);
+
+app.mount('#app');
