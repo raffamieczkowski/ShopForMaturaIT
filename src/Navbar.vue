@@ -33,7 +33,7 @@
   import { useRouter } from 'vue-router';
   
   export default {
-    name: 'Navbar',
+    name: 'NavBar',
     setup() {
       const searchQuery = ref('');
       const showCart = ref(false);
@@ -74,15 +74,17 @@
       };
   
       const goToProductDetails = async (productId) => {
-        try {
-          const response = await fetch(`https://fakestoreapi.com/products/${productId}`);
-          const productDetails = await response.json();
-          console.log('Product Details:', productDetails);
-          router.push({ name: 'ProductDetails', params: { id: productId } });
-        } catch (error) {
-          console.error('Error fetching product details:', error);
-        }
-      };
+  try {
+    const response = await fetch(`https://fakestoreapi.com/products/${productId}`);
+    const productDetails = await response.json();
+    
+    router.push({ name: 'ProductDetails', params: { id: productId } });
+
+  } catch (error) {
+    console.error('Error fetching product details:', error);
+  }
+};
+
   
       return {
         searchQuery,
@@ -120,4 +122,3 @@
     background-color: #f0f0f0;
   }
   </style>
-  

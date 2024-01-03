@@ -19,7 +19,7 @@
   import { ref, computed } from 'vue';
   
   export default {
-    name: 'Checkout',
+    name: 'CheckoutSection',
     setup() {
       const cartItems = ref([
         { name: 'Product 1', price: 10 },
@@ -49,4 +49,3 @@
   
   <style>
   </style>
-  
