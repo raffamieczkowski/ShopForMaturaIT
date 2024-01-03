@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
 const loading = ref(true);
@@ -34,7 +34,15 @@ const fetchProductDetails = async () => {
   }
 };
 
-fetchProductDetails();
+onMounted(fetchProductDetails);
+
+watch(
+  () => router.currentRoute.value.params.id,
+  () => {
+    loading.value = true;
+    fetchProductDetails();
+  }
+);
 
 const addToCart = (product) => {
   cartItems.value.push(product);
