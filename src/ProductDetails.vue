@@ -26,9 +26,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, getCurrentInstance } from 'vue';
 import { useRouter } from 'vue-router';
 
+const appContext = getCurrentInstance();
 const loading = ref(true);
 const product = ref(null);
 const router = useRouter();
@@ -64,7 +65,10 @@ const addToCart = (product) => {
   localStorage.setItem('cartItems', JSON.stringify(cartItems));
   console.log('Dodano produkt do koszyka:', product);
   console.log('Aktualna zawartość koszyka:', cartItems);
-  appContext.emit('cartItemAdded', cartItems);
+
+  if (appContext) {
+    appContext.emit('cartItemAdded', cartItems);
+  }
 };
 
 const addComment = () => {
