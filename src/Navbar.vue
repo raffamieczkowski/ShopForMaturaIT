@@ -71,7 +71,7 @@ export default {
     };
 
     const checkout = () => {
-      // Logika płatności
+      // Logika płatności dodaj tutaj!!!
     };
 
     const goToProductDetails = async (productId) => {
@@ -79,10 +79,7 @@ export default {
         const response = await fetch(`https://fakestoreapi.com/products/${productId}`);
         const productDetails = await response.json();
         
-        // Przekierowanie do szczegółów produktu na podstawie jego ID
         router.push({ name: 'ProductDetails', params: { id: productId } });
-        
-        // Resetowanie wyników wyszukiwania
         searchResults.value = [];
         searchQuery.value = '';
 

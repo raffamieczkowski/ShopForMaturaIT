@@ -9,17 +9,15 @@
       <p>Rating: {{ product.rating }}</p>
       <p>Description: {{ product.description }}</p>
       
-      <!-- Pole do dodawania komentarzy -->
       <div class="comment-section">
         <input type="text" v-model="newComment" placeholder="Add comment" />
         <button @click="addComment">Add Comment</button>
       </div>
 
-      <!-- Wyświetlanie komentarzy z localStorage -->
       <div class="comments-section">
         <h3>Comments:</h3>
         <ul>
-          <li v-for="(comment, index) in comments" :key="index">{{ comment }}</li>
+          <li v-for="(comment, index) in productComments" :key="index">{{ comment }}</li>
         </ul>
       </div>
     </div>
@@ -34,13 +32,13 @@ const loading = ref(true);
 const product = ref(null);
 const router = useRouter();
 const cartItems = ref([]);
-const comments = ref([]); // Tablica na komentarze
-const newComment = ref(''); // Nowy komentarz
+const newComment = ref('');
+const productId = ref(null);
 
 const fetchProductDetails = async () => {
   try {
-    const productId = router.currentRoute.value.params.id;
-    const response = await fetch(`https://fakestoreapi.com/products/${productId}`);
+    productId.value = router.currentRoute.value.params.id;
+    const response = await fetch(`https://fakestoreapi.com/products/${productId.value}`);
     const data = await response.json();
     product.value = data;
     loading.value = false;
@@ -64,26 +62,28 @@ const addToCart = (product) => {
   cartItems.value.push(product);
 };
 
-// Funkcja dodająca komentarz do tablicy i do localStorage
 const addComment = () => {
   if (newComment.value.trim() !== '') {
-    comments.value.push(newComment.value);
-    localStorage.setItem('productComments', JSON.stringify(comments.value)); // Zapisz w localStorage
-    newComment.value = ''; // Wyczyść pole po dodaniu komentarza
+    const storedComments = localStorage.getItem(`productComments_${productId.value}`) || '[]';
+    const comments = JSON.parse(storedComments);
+    comments.push(newComment.value);
+    localStorage.setItem(`productComments_${productId.value}`, JSON.stringify(comments));
+    newComment.value = '';
+    productComments.value = comments;
   }
 };
 
-// Pobieranie komentarzy z localStorage po załadowaniu komponentu
+const productComments = ref([]);
 onMounted(() => {
-  const storedComments = localStorage.getItem('productComments');
+  const storedComments = localStorage.getItem(`productComments_${productId.value}`);
   if (storedComments) {
-    comments.value = JSON.parse(storedComments);
+    productComments.value = JSON.parse(storedComments);
   }
 });
 </script>
 
 <style>
-/* dodaj style */
+/* dodaj style !!!!! */
 .comment-section {
   margin-top: 20px;
 }
