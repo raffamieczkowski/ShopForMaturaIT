@@ -8,6 +8,7 @@
       <p>Category: {{ product.category }}</p>
       <p>Rating: {{ product.rating }}</p>
       <p>Description: {{ product.description }}</p>
+      <button @click="addToCart(product)">Add to Cart</button>
       
       <div class="comment-section">
         <input type="text" v-model="newComment" placeholder="Add comment" />
@@ -31,7 +32,6 @@ import { useRouter } from 'vue-router';
 const loading = ref(true);
 const product = ref(null);
 const router = useRouter();
-const cartItems = ref([]);
 const newComment = ref('');
 const productId = ref(null);
 
@@ -59,7 +59,9 @@ watch(
 );
 
 const addToCart = (product) => {
-  cartItems.value.push(product);
+  const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+  cartItems.push(product);
+  localStorage.setItem('cartItems', JSON.stringify(cartItems));
 };
 
 const addComment = () => {
@@ -83,7 +85,7 @@ onMounted(() => {
 </script>
 
 <style>
-/* dodaj style !!!!! */
+/* dodaj style */
 .comment-section {
   margin-top: 20px;
 }

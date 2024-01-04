@@ -6,6 +6,7 @@
         <img :src="product.image" :alt="product.title" class="product-list__item-image" />
         <h3>{{ product.title }}</h3>
         <p>Price: ${{ product.price }}</p>
+        <button @click="addToCart(product)">Add to Cart</button>
         <router-link :to="{ name: 'ProductDetails', params: { id: product.id } }">View Details</router-link>
       </div>
     </div>
@@ -44,9 +45,11 @@ watch(searchQuery, (newValue) => {
   );
 });
 
-// const addToCart = (product) => {
-  // dodaj logikę tutaj
-// };
+const addToCart = (product) => {
+  const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+  cartItems.push(product);
+  localStorage.setItem('cartItems', JSON.stringify(cartItems));
+};
 </script>
 
 <style>

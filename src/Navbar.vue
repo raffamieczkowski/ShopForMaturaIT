@@ -14,16 +14,13 @@
     <div class="navbar__cart" @click="toggleCart">
       <span class="navbar__cart-icon">🛒</span>
       <span v-if="cartItems.length > 0" class="navbar__cart-count">{{ cartItems.length }}</span>
-      <div v-if="showCart" class="navbar__cart-dropdown">
-        <div v-for="(item, index) in cartItems" :key="index" class="navbar__cart-item">
-          {{ item.name }} - ${{ item.price }}
-          <button @click="removeFromCart(index)">Remove</button>
-        </div>
-        <div v-if="cartItems.length > 0" class="navbar__cart-total">
-          Total: ${{ getTotalPrice }}
-          <button @click="checkout">Checkout</button>
-        </div>
-      </div>
+      <CartItems
+        v-if="showCart"
+        :cartItems="cartItems"
+        :removeFromCart="removeFromCart"
+        :getTotalPrice="getTotalPrice"
+        :checkout="checkout"
+      />
     </div>
   </nav>
 </template>
