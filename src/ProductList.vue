@@ -6,9 +6,9 @@
         <img :src="product.image" :alt="product.title" class="product-list__item-image" />
         <h3>{{ product.title }}</h3>
         <p>Price: ${{ product.price }}</p>
-        <p>Rating: {{ product.rating }}</p>
+        <!-- <p>Rating: {{ product.rating }}</p> -->
         <router-link :to="{ name: 'ProductDetails', params: { id: product.id } }">View Details</router-link>
-        <button @click="addToCart(product)">Add to Cart</button>
+        <!-- <button @click="addToCart(product)">Add to Cart</button> -->
       </div>
     </div>
   </div>
