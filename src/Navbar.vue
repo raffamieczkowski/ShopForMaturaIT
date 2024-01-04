@@ -38,7 +38,7 @@
 import { ref, computed } from 'vue';
 import CartItems from './CartItems.vue';
 import { useRouter } from 'vue-router';
-import { useStore } from 'vuex'; // Dodaj import
+import { useStore } from 'vuex';
 
 export default {
   name: 'NavBar',
@@ -46,7 +46,7 @@ export default {
     CartItems,
   },
   setup() {
-    const store = useStore(); // Użyj store Vuex
+    const store = useStore();
 
     const searchQuery = ref('');
     const showCart = ref(false);
@@ -87,8 +87,6 @@ export default {
         console.error('Error fetching product details:', error);
       }
     };
-
-    // Poniżej logika dodawania, usuwania i aktualizacji koszyka za pomocą Vuex
     const addToCart = (product) => {
       store.commit('addToCart', product);
     };

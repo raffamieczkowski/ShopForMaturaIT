@@ -1,20 +1,36 @@
 import { createStore } from 'vuex';
 
 const store = createStore({
-  state: {
-    cartItems: [],
+  state() {
+    return {
+      cartItems: [],
+    };
   },
   mutations: {
     addToCart(state, product) {
       state.cartItems.push(product);
-      localStorage.setItem('cartItems', JSON.stringify(state.cartItems));
     },
     setCartItems(state, cartItems) {
       state.cartItems = cartItems;
     },
-    removeFromCart(state, index) {
-      state.cartItems.splice(index, 1);
-      localStorage.setItem('cartItems', JSON.stringify(state.cartItems));
+  },
+  actions: {
+    updateCartItems({ commit }, cartItems) {
+      commit('setCartItems', cartItems);
+    },
+    addProductToCart({ commit, state }, product) {
+      const updatedCart = [...state.cartItems, product];
+      commit('addToCart', product);
+      localStorage.setItem('cartItems', JSON.stringify(updatedCart));
+    },
+    fetchCartItems({ commit }) {
+      const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+      commit('setCartItems', cartItems);
+    },
+  },
+  getters: {
+    cartItemCount(state) {
+      return state.cartItems.length;
     },
   },
 });
