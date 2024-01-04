@@ -4,6 +4,7 @@ import App from './App.vue';
 import ProductList from './ProductList.vue';
 import ProductDetails from './ProductDetails.vue';
 import Checkout from './Checkout.vue';
+import store from './store.js';
 
 const app = createApp(App);
 
@@ -19,5 +20,6 @@ const router = createRouter({
 });
 
 app.use(router);
+app.use(store);
 
 app.mount('#app');

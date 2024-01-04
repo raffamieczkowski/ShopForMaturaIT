@@ -6,7 +6,7 @@
           <button @click="removeFromCart(index)">Remove</button>
         </div>
         <div class="navbar__cart-total">
-          Total: ${{ getTotalPrice }}
+          Total: ${{ getTotalPrice() }}
           <button @click="checkout">Checkout</button>
         </div>
       </div>
@@ -14,7 +14,7 @@
   </template>
   
   <script>
-  import { ref, computed } from 'vue';
+  import { ref, watch } from 'vue';
   
   export default {
     name: 'CartItems',
@@ -35,6 +35,18 @@
         type: Function,
         required: true,
       },
+    },
+    setup(props) {
+      const cartItems = ref(props.cartItems);
+  
+      watch(() => localStorage.getItem('cartItems'), (newVal) => {
+        const parsedCartItems = JSON.parse(newVal);
+        cartItems.value = parsedCartItems || [];
+      });
+  
+      return {
+        cartStoreItems,
+      };
     },
   };
   </script>

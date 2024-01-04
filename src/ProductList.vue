@@ -14,15 +14,14 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from 'vue';
-// import { useRouter } from 'vue-router';
+import { ref, watch, onMounted, getCurrentInstance } from 'vue';
+
+const appContext = getCurrentInstance();
 
 const searchQuery = ref('');
 const loading = ref(true);
 const products = ref([]);
 const filteredProducts = ref([]);
-
-// const router = useRouter();
 
 const fetchProducts = async () => {
   try {
@@ -49,6 +48,12 @@ const addToCart = (product) => {
   const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
   cartItems.push(product);
   localStorage.setItem('cartItems', JSON.stringify(cartItems));
+  console.log('Dodano produkt do koszyka:', product);
+  console.log('Aktualna zawartość koszyka:', cartItems);
+
+  if (appContext) {
+    appContext.emit('cartItemAdded', cartItems);
+  }
 };
 </script>
 

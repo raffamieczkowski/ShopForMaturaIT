@@ -11,44 +11,51 @@
         </li>
       </ul>
     </div>
-    <div class="navbar__cart" @click="toggleCart">
-      <span class="navbar__cart-icon">🛒</span>
+
+    <span class="navbar__cart-icon" @click="toggleCart">
+      🛒
       <span v-if="cartItems.length > 0" class="navbar__cart-count">{{ cartItems.length }}</span>
-      <CartItems
-        v-if="showCart"
-        :cartItems="cartItems"
-        :removeFromCart="removeFromCart"
-        :getTotalPrice="getTotalPrice"
-        :checkout="checkout"
-      />
+    </span>
+    <CartItems
+      v-if="showCart"
+      :cartItems="cartItems"
+      :removeFromCart="removeFromCart"
+      :getTotalPrice="getTotalPrice"
+      :checkout="checkout"
+    />
+    <div class="cartList" v-if="showCart">
+      <h3>Cart Contents:</h3>
+      <ul>
+        <li v-for="(item, index) in cartItems" :key="'cart_' + index">
+          {{ item.name }} - ${{ item.price }}
+        </li>
+      </ul>
     </div>
   </nav>
 </template>
 
 <script>
 import { ref, computed } from 'vue';
+import CartItems from './CartItems.vue';
 import { useRouter } from 'vue-router';
+import { useStore } from 'vuex'; // Dodaj import
 
 export default {
   name: 'NavBar',
+  components: {
+    CartItems,
+  },
   setup() {
+    const store = useStore(); // Użyj store Vuex
+
     const searchQuery = ref('');
     const showCart = ref(false);
-    const cartItems = ref([]);
     const searchResults = ref([]);
     const router = useRouter();
 
     const toggleCart = () => {
       showCart.value = !showCart.value;
     };
-
-    const removeFromCart = (index) => {
-      cartItems.value.splice(index, 1);
-    };
-
-    const getTotalPrice = computed(() => {
-      return cartItems.value.reduce((total, item) => total + item.price, 0);
-    });
 
     const performSearch = async () => {
       try {
@@ -67,10 +74,6 @@ export default {
       }
     };
 
-    const checkout = () => {
-      // Logika płatności dodaj tutaj!!!
-    };
-
     const goToProductDetails = async (productId) => {
       try {
         const response = await fetch(`https://fakestoreapi.com/products/${productId}`);
@@ -85,6 +88,27 @@ export default {
       }
     };
 
+    // Poniżej logika dodawania, usuwania i aktualizacji koszyka za pomocą Vuex
+    const addToCart = (product) => {
+      store.commit('addToCart', product);
+    };
+
+    const removeFromCart = (index) => {
+      store.commit('removeFromCart', index);
+    };
+
+    const getTotalPrice = computed(() => {
+      return store.getters.getTotalPrice;
+    });
+
+    const cartItems = computed(() => {
+      return store.state.cartItems;
+    });
+
+    const checkout = () => {
+      // Logika płatności dodaj tutaj!!!
+    };
+
     return {
       searchQuery,
       performSearch,
@@ -96,12 +120,20 @@ export default {
       checkout,
       searchResults,
       goToProductDetails,
+      addToCart,
     };
   },
 };
 </script>
 
 <style>
+/* dodaj style */
+.cartList {
+  background-color: red;
+  width: 300px;
+  height: 300px;
+}
+
 .search-results {
   list-style: none;
   padding: 0;
