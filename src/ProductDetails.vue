@@ -69,7 +69,9 @@ const addToCart = (product) => {
   const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
   cartItems.push(product);
   localStorage.setItem('cartItems', JSON.stringify(cartItems));
-  console.log('Dodano do koszyka:', product);
+  console.log('Dodano produkt do koszyka:', product);
+  console.log('Aktualna zawartość koszyka:', cartItems);
+
   if (appContext) {
     appContext.emit('cartItemAdded', cartItems);
   }
