@@ -13,33 +13,34 @@
     </div>
 
     <div class="navbar__cart-icon" @click="toggleCart">
-      🛒
-      <span v-if="cartItems.length > 0" class="navbar__cart-count">{{ cartItems.length }}</span>
-    </div>
+    🛒
+    <span v-if="cartItems.length > 0" class="navbar__cart-count">{{ cartItems.length }}</span>
+  </div>
 
-    <div v-if="showCart" class="navbar__cart-dropdown">
-      <div v-if="cartItems.length === 0" class="navbar__cart-empty">Koszyk jest pusty.</div>
-      <div v-else>
-        <div v-for="(item, index) in cartItems" :key="index" class="navbar__cart-item">
-          {{ item.name }} - ${{ item.price }}
-          <button @click="removeFromCart(index)">Usuń</button>
-        </div>
-        <div class="navbar__cart-total">
-          Całkowita cena: ${{ getTotalPrice }}
-          <router-link :to="{ name: 'Checkout' }">
-            <button>Przejdź do Checkout</button>
-          </router-link>
-        </div>
+  <div v-if="showCart" class="navbar__cart-dropdown">
+    <div v-if="cartItems.length === 0" class="navbar__cart-empty">Koszyk jest pusty.</div>
+    <div v-else>
+      <div v-for="(item, index) in cartItems" :key="index" class="navbar__cart-item">
+        {{ item.name }} - ${{ item.price }}
+        <button @click="removeFromCart(index)">Usuń</button>
+      </div>
+      <div class="navbar__cart-total">
+        Całkowita cena: ${{ getTotalPrice }}
+        <router-link :to="{ name: 'Checkout' }">
+          <button>Przejdź do Checkout</button>
+        </router-link>
       </div>
     </div>
-    <div class="cartList" v-if="showCart">
-      <h3>Cart Contents:</h3>
-      <ul>
-        <li v-for="(item, index) in cartItems" :key="'cart_' + index">
-          {{ item.name }} - ${{ item.price }}
-        </li>
-      </ul>
-    </div>
+  </div>
+
+  <div class="cartList" v-if="showCart">
+    <h3>Cart Contents:</h3>
+    <ul>
+      <li v-for="(item, index) in cartItems" :key="'cart_' + index">
+        {{ item.name }} - ${{ item.price }}
+      </li>
+    </ul>
+  </div>
   </nav>
 </template>
 
@@ -60,7 +61,6 @@ export default {
     const showCart = ref(false);
     const searchResults = ref([]);
     const router = useRouter();
-
     const toggleCart = () => {
       showCart.value = !showCart.value;
     };
@@ -111,6 +111,7 @@ export default {
       return store.state.cartItems;
     });
 
+    
     const checkout = () => {
       // Logika płatności dodaj tutaj!!!
     };
@@ -127,6 +128,7 @@ export default {
       searchResults,
       goToProductDetails,
       addToCart,
+
     };
   },
 };

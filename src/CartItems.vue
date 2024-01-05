@@ -36,24 +36,9 @@
         required: true,
       },
     },
-    setup(props) {
-      const cartItems = ref(props.cartItems);
-  
-      const getTotalPrice = computed(() => {
-        return cartItems.value.reduce((total, item) => total + item.price, 0);
-      });
-
-      watch(() => props.cartItems, (newCartItems) => {
-        cartItems.value = newCartItems;
-      });
-  
-    //   return {
-    //     cartItems,
-    //     getTotalPrice,
-    //     removeFromCart,
-    //     checkout,
-    //   };
-    },
+    // setup() {
+    //   // Nic nie musi być tutaj, możesz usunąć blok setup
+    // },
   };
   </script>
   
