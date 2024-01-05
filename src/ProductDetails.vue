@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="loading" class="product-details__loading">Loading...</div>
+    <div v-if="loading" class="loading-indicator">Loading...</div>
     <div v-else class="product-details">
       <h2>{{ product.title }}</h2>
       <img :src="product.image" :alt="product.title" class="product-details__image" />
@@ -18,7 +18,11 @@
       <div class="comments-section">
         <h3>Comments:</h3>
         <ul>
-          <li v-for="(comment, index) in productComments" :key="index">{{ comment }}</li>
+          <li v-for="(comment, index) in productComments" :key="index">
+            {{ comment }}
+            <button @click="editComment(index)">Edit</button>
+            <button @click="deleteComment(index)">Delete</button>
+          </li>
         </ul>
       </div>
     </div>
@@ -39,10 +43,12 @@ const productId = ref(null);
 const fetchProductDetails = async () => {
   try {
     productId.value = router.currentRoute.value.params.id;
-    const response = await fetch(`https://fakestoreapi.com/products/${productId.value}`);
-    const data = await response.json();
-    product.value = data;
-    loading.value = false;
+    setTimeout(async () => {
+      const response = await fetch(`https://fakestoreapi.com/products/${productId.value}`);
+      const data = await response.json();
+      product.value = data;
+      loading.value = false;
+    }, 2000);
   } catch (error) {
     console.error('Error fetching product details:', error);
     loading.value = false;
@@ -63,9 +69,7 @@ const addToCart = (product) => {
   const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
   cartItems.push(product);
   localStorage.setItem('cartItems', JSON.stringify(cartItems));
-  console.log('Dodano produkt do koszyka:', product);
-  console.log('Aktualna zawartość koszyka:', cartItems);
-
+  console.log('Dodano do koszyka:', product);
   if (appContext) {
     appContext.emit('cartItemAdded', cartItems);
   }
@@ -82,6 +86,18 @@ const addComment = () => {
   }
 };
 
+const editComment = (index) => {
+  newComment.value = productComments.value[index];
+  deleteComment(index);
+};
+
+const deleteComment = (index) => {
+  const comments = [...productComments.value];
+  comments.splice(index, 1);
+  localStorage.setItem(`productComments_${productId.value}`, JSON.stringify(comments));
+  productComments.value = comments;
+};
+
 const productComments = ref([]);
 onMounted(() => {
   const storedComments = localStorage.getItem(`productComments_${productId.value}`);
@@ -92,7 +108,35 @@ onMounted(() => {
 </script>
 
 <style>
-/* dodaj style */
+.loading-indicator {
+  font-size: 24px;
+  text-align: center;
+  padding: 20px;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.8);
+  }
+  50% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0.8);
+  }
+}
+
+.loading-indicator::after {
+  content: '';
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-left: 10px;
+  border-radius: 50%;
+  background-color: #007bff;
+  animation: pulse 1s infinite;
+}
+
 .comment-section {
   margin-top: 20px;
 }

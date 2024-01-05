@@ -31,7 +31,6 @@
         type: Function,
         required: true,
       },
-      // Przekazana prop 'getTotalPrice' od NavBar.vue
       getTotalPrice: {
         type: Function,
         required: true,
@@ -59,6 +58,6 @@
   </script>
   
   <style>
-  /* dodaj style */
+  /* DODAJ STYLE */
   </style>
   

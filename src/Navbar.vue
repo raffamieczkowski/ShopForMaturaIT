@@ -12,17 +12,26 @@
       </ul>
     </div>
 
-    <span class="navbar__cart-icon" @click="toggleCart">
+    <div class="navbar__cart-icon" @click="toggleCart">
       🛒
       <span v-if="cartItems.length > 0" class="navbar__cart-count">{{ cartItems.length }}</span>
-    </span>
-    <CartItems
-      v-if="showCart"
-      :cartItems="cartItems"
-      :removeFromCart="removeFromCart"
-      :getTotalPrice="getTotalPrice"
-      :checkout="checkout"
-    />
+    </div>
+
+    <div v-if="showCart" class="navbar__cart-dropdown">
+      <div v-if="cartItems.length === 0" class="navbar__cart-empty">Koszyk jest pusty.</div>
+      <div v-else>
+        <div v-for="(item, index) in cartItems" :key="index" class="navbar__cart-item">
+          {{ item.name }} - ${{ item.price }}
+          <button @click="removeFromCart(index)">Usuń</button>
+        </div>
+        <div class="navbar__cart-total">
+          Całkowita cena: ${{ getTotalPrice }}
+          <router-link :to="{ name: 'Checkout' }">
+            <button>Przejdź do Checkout</button>
+          </router-link>
+        </div>
+      </div>
+    </div>
     <div class="cartList" v-if="showCart">
       <h3>Cart Contents:</h3>
       <ul>
@@ -47,7 +56,6 @@ export default {
   },
   setup() {
     const store = useStore();
-
     const searchQuery = ref('');
     const showCart = ref(false);
     const searchResults = ref([]);
@@ -125,29 +133,29 @@ export default {
 </script>
 
 <style>
-/* dodaj style */
-.cartList {
-  background-color: red;
-  width: 300px;
-  height: 300px;
+
+.navbar {
+  /* DODAJ STYLE */
 }
 
-.search-results {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  position: absolute;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  width: 100%;
+.navbar__title {
+  /* DODAJ STYLE*/
 }
 
-.search-results li {
-  padding: 5px;
-  cursor: pointer;
+.navbar__cart-icon {
+  /* DODAJ STYLE */
 }
 
-.search-results li:hover {
-  background-color: #f0f0f0;
+.navbar__cart-count {
+  /* DODAJ STYLE */
 }
+
+.navbar__cart-dropdown {
+  /* DODAJ STYLE */
+}
+
+.navbar__cart-item {
+  /* DODAJ STYLE */
+}
+
 </style>

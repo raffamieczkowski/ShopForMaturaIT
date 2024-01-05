@@ -1,6 +1,9 @@
 <template>
   <div class="product-list">
-    <!-- ... -->
+    <div v-if="loading" class="loading-indicator">
+      Loading...
+    </div>
+
     <div v-if="!loading" class="product-list__items">
       <div v-for="product in filteredProducts" :key="product.id" class="product-list__item">
         <img :src="product.image" :alt="product.title" class="product-list__item-image" />
@@ -29,7 +32,9 @@ const fetchProducts = async () => {
     const data = await response.json();
     products.value = data;
     filteredProducts.value = data;
-    loading.value = false;
+    setTimeout(() => {
+      loading.value = false;
+    }, 3000);
   } catch (error) {
     console.error('Error fetching products:', error);
     loading.value = false;
@@ -39,10 +44,24 @@ const fetchProducts = async () => {
 onMounted(fetchProducts);
 
 watch(searchQuery, (newValue) => {
-  filteredProducts.value = products.value.filter((product) =>
-    product.title.toLowerCase().includes(newValue.toLowerCase())
-  );
+  filterProducts();
 });
+
+const filterProducts = () => {
+  let filtered = products.value;
+
+  filtered = filtered.filter((product) =>
+    product.title.toLowerCase().includes(searchQuery.value.toLowerCase())
+  );
+
+  filtered = filtered.filter((product) => product.price >= minPrice && product.price <= maxPrice);
+
+  filtered = filtered.filter((product) => product.category === selectedCategory);
+
+  filtered = filtered.filter((product) => product.rating === selectedRating);
+
+  filteredProducts.value = filtered;
+};
 
 const addToCart = (product) => {
   const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
@@ -58,4 +77,32 @@ const addToCart = (product) => {
 </script>
 
 <style>
+.loading-indicator {
+  font-size: 24px;
+  text-align: center;
+  padding: 20px;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.8);
+  }
+  50% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0.8);
+  }
+}
+
+.loading-indicator::after {
+  content: '';
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-left: 10px;
+  border-radius: 50%;
+  background-color: #007bff;
+  animation: pulse 1s infinite;
+}
 </style>

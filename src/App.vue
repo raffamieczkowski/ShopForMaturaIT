@@ -32,5 +32,5 @@ export default {
 </script>
 
 <style>
-/* dodaj style */
+/* DODAJ STYLE */
 </style>
