@@ -96,15 +96,20 @@ export default {
       }
     };
     const addToCart = (product) => {
-      store.commit('addToCart', product);
+      const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+      cartItems.push(product);
+      localStorage.setItem('cartItems', JSON.stringify(cartItems));
     };
 
     const removeFromCart = (index) => {
-      store.commit('removeFromCart', index);
+      const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+      cartItems.splice(index, 1);
+      localStorage.setItem('cartItems', JSON.stringify(cartItems));
     };
 
     const getTotalPrice = computed(() => {
-      return store.getters.getTotalPrice;
+      const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+      return cartItems.reduce((total, item) => total + item.price, 0);
     });
 
     const cartItems = computed(() => {
