@@ -24,12 +24,12 @@
         {{ item.name }} - ${{ item.price }}
         <button @click="removeFromCart(index)">Usuń</button>
       </div>
-      <div class="navbar__cart-total">
+      <!-- <div class="navbar__cart-total">
         Całkowita cena: ${{ getTotalPrice }}
         <router-link :to="{ name: 'Checkout' }">
           <button>Przejdź do Checkout</button>
         </router-link>
-      </div>
+      </div> -->
     </div>
   </div>
 
@@ -108,8 +108,10 @@ export default {
     });
 
     const cartItems = computed(() => {
-      return store.state.cartItems;
+      const storedCartItems = localStorage.getItem('cartItems');
+      return storedCartItems ? JSON.parse(storedCartItems) : [];
     });
+
 
     
     const checkout = () => {

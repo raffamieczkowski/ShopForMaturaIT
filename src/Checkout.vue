@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="checkout">
     <h2>Checkout</h2>
     <div v-if="cartItems.length === 0" class="checkout__empty">Your cart is empty</div>
@@ -59,4 +59,4 @@ export default {
 
 <style>
 /* DODAJ STYLE */
-</style>
+</style> -->
